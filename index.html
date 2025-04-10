@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>3D Printer Booking</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      width: 320px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-weight: bold;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .message {
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Book a 3D Printer</h2>
+    <form id="bookingForm">
+      <label for="name">Your Name</label>
+      <input type="text" id="name" required>
+
+      <label for="date">Date</label>
+      <input type="date" id="date" required>
+
+      <label for="printer">Select Printer</label>
+      <select id="printer" required>
+        <option value="">Choose one...</option>
+        <option value="Printer 1">Printer 1</option>
+        <option value="Printer 2">Printer 2</option>
+        <option value="Printer 3">Printer 3</option>
+        <option value="Printer 4">Printer 4</option>
+        <option value="Printer 5">Printer 5</option>
+        <option value="Printer 6">Printer 6</option>
+      </select>
+
+      <button type="submit">Reserve</button>
+      <div id="message" class="message"></div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('bookingForm');
+    const message = document.getElementById('message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      message.textContent = '';
+      message.className = 'message';
+
+      const name = document.getElementById('name').value.trim();
+      const date = document.getElementById('date').value;
+      const printer = document.getElementById('printer').value;
+
+      const res = await fetch("https://script.google.com/macros/s/AKfycbyiQzN2wDE4woQj0tyc5MvKfXUoeoyHkP81lhx2kmhrV8_l5XgUD2txTgoJ0jsqrxpH/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, date, printer }),
+      });
+
+      const result = await res.json();
+
+      if (result.success) {
+        message.textContent = "✅ Printer booked successfully!";
+        message.classList.add('success');
+        form.reset();
+      } else {
+        message.textContent = `❌ ${result.message}`;
+        message.classList.add('error');
+      }
+    });
+  </script>
+</body>
+</html>
