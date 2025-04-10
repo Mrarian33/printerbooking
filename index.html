@@ -108,13 +108,14 @@
       const printer = document.getElementById('printer').value;
 
       const res = await fetch("https://script.google.com/macros/s/AKfycbyiQzN2wDE4woQj0tyc5MvKfXUoeoyHkP81lhx2kmhrV8_l5XgUD2txTgoJ0jsqrxpH/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, date, printer }),
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, date, printer }),
       });
-
-      const result = await res.json();
-
+      
+      const result = await res.json(); // Ensure you're handling the response
+      console.log(result); // Log the response to check if it’s returning success or failure
+      
       if (result.success) {
         message.textContent = "✅ Printer booked successfully!";
         message.classList.add('success');
